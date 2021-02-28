@@ -1,6 +1,7 @@
 package net.trancool.flixster.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import net.trancool.flixster.MovieDetailsActivity;
 import net.trancool.flixster.R;
 import net.trancool.flixster.models.Movie;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -55,14 +59,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>
         return movies.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
+
+    //viewholder inner class
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView tvTitle;
         TextView tvOverview;
         ImageView ivPoster;
 
 
-        public ViewHolder(@NonNull View itemView) {
+
+        public ViewHolder(@NonNull View itemView)//this make sense since the viewhold actually hold all the view
+        {
             super(itemView);
 
 
@@ -70,8 +79,33 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>
             tvOverview = itemView.findViewById(R.id.tvOverview);
             ivPoster = itemView.findViewById(R.id.ivPoster);
 
+            itemView.setOnClickListener(this);
+
         }
 
+
+
+        @Override
+        public void onClick(View v)
+        {
+            int position = getAdapterPosition();//get Adapter position
+
+
+            //check if the position is valid
+            if(position != RecyclerView.NO_POSITION)
+            {
+                //get the movie at the position
+                Movie  movie = movies.get(position);
+
+                //creating intent to transfer data to the other class
+                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+
+
+                context.startActivity(intent);
+            }
+
+        }
         public void bind(Movie movie)
         {
             tvTitle.setText(movie.getTitle());

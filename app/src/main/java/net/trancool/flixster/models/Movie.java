@@ -3,18 +3,27 @@ package net.trancool.flixster.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Parcel
 public class Movie
 {
     String posterPath;
     String backDropPath;
     String title;
     String overview;
+    double voteAverage;
+    int movieID;
 
 
+
+    public Movie() { }//No-Arg constructor required by Parceler
+
+    public int getMovieID() {
+        return movieID;
+    }
 
     public Movie(JSONObject jsonObject) throws JSONException
     {
@@ -22,7 +31,11 @@ public class Movie
         backDropPath = jsonObject.getString("backdrop_path");
         title = jsonObject.getString("title");
         overview = jsonObject.getString("overview");
+        voteAverage = jsonObject.getDouble("vote_average");
+        movieID = jsonObject.getInt("id");
     }
+
+
 
     public  static List<Movie> fromJsonArray(JSONArray movieJsonArray) throws JSONException
     {
@@ -51,5 +64,13 @@ public class Movie
     public String getOverview()
     {
         return overview;
+    }
+
+    public Movie(double ratings) {
+        this.voteAverage = ratings;
+    }
+
+    public double getVoteAverage() {
+        return voteAverage;
     }
 }
